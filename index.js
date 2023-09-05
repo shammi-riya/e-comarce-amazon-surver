@@ -59,7 +59,7 @@ async function run() {
 
         app.delete("/carts/:id" ,async(req,res)=>{
             const id = req.params.id;
-            console.log(id);
+          
             const quiry = {_id : new ObjectId(id)};
             const result = await cartsCollection.deleteOne(quiry);
             console.log(result);
@@ -71,6 +71,54 @@ async function run() {
 
 
 
+// update quintity
+
+
+app.patch("/increse-quinty/:id", async (req, res) => {
+    const id = req.params.id;
+    console.log(id);
+  
+      const product = await cartsCollection.findOne({ _id: new ObjectId(id)});
+      console.log(product);
+  
+      if (!product) {
+        return res.status(404).json({ error: 'Product not found' });
+      }
+  
+      product.productQuantity = product.productQuantity+ 1;
+  
+      const updatedProduct = await cartsCollection.updateOne(
+        { _id: new ObjectId(id)},
+        { $set: { productQuantity: product.productQuantity } }
+      );
+  
+      res.send(updatedProduct);
+    } 
+  );
+
+
+
+app.patch("/decress-quinty/:id", async (req, res) => {
+    const id = req.params.id;
+    console.log(id);
+  
+      const product = await cartsCollection.findOne({ _id: new ObjectId(id)});
+      console.log(product);
+  
+      if (!product) {
+        return res.status(404).json({ error: 'Product not found' });
+      }
+  
+      product.productQuantity = product.productQuantity- 1;
+  
+      const updatedProduct = await cartsCollection.updateOne(
+        { _id: new ObjectId(id)},
+        { $set: { productQuantity: product.productQuantity } }
+      );
+  
+      res.send(updatedProduct);
+    } 
+  );
 
 
 
